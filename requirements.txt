@@ -1,5 +1,7 @@
 streamlit==1.39.0
 langchain==0.3.13
+langchain-core==0.3.21
 langchain-groq==0.2.1
+groq==0.12.0
 langgraph==0.2.62
-groq>=0.12.0
+langgraph-checkpoint==2.0.6
