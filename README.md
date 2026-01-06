@@ -29,7 +29,7 @@ An interactive story generation application powered by AI that creates dynamic, 
 
 1. **Clone the repository**
 ```bash
-   git clone https://github.com/yourusername/story-generator.git
+   git clone https://github.com/SayanPal12/Story-Generator.git
    cd story-generator
 ```
 
