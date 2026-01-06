@@ -16,7 +16,7 @@ An interactive story generation application powered by AI that creates dynamic, 
 
 - **Frontend**: Streamlit
 - **Backend**: LangGraph (LangChain)
-- **AI Model**: Groq API (Llama 3.3 70B / Llama 3.1 8B)
+- **AI Model**: Groq API (Llama 3.1 8B)
 - **State Management**: LangGraph MemorySaver
 - **Language**: Python 3.8+
 
