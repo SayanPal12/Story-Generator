@@ -97,6 +97,7 @@ if not api_key:
 if st.session_state['agent'] is None:
     try:
         st.session_state['agent'] = get_agent(api_key)
+        st.rerun()
     except Exception as e:
         st.error(f"❌ Error: {e}")
         st.stop()
@@ -174,4 +175,5 @@ if st.session_state['topic']!= None:
                     st.session_state['story']= response2['story']
                     st.session_state['interrupt'].append(response2['__interrupt__'][0].value['options'])
                     st.rerun()
+
 
