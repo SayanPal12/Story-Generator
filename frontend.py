@@ -101,79 +101,77 @@ if st.session_state['agent'] is None:
         st.error(f"❌ Error: {e}")
         st.stop()
 
-try:
-    CONFIG= {'configurable': {'thread_id': 'thread-1'}}
 
-    if st.session_state['input_flag']:
+CONFIG= {'configurable': {'thread_id': 'thread-1'}}
 
-        user_input= st.chat_input("Enter Topic")
+if st.session_state['input_flag']:
 
-        if user_input:
-            with st.spinner("✨ Generating your story..."):
-                st.session_state['input_flag']= False
-                st.session_state['topic']= user_input
-                initial_state= {'topic':st.session_state['topic'], 'messages':[], 'story':[]}
-                response= st.session_state['agent'].invoke(initial_state, config=CONFIG)
-                st.session_state['story'].append(response['story'][0])
-                st.session_state['interrupt'].append(response['__interrupt__'][0].value['options'])
+    user_input= st.chat_input("Enter Topic")
+
+    if user_input:
+        with st.spinner("✨ Generating your story..."):
+            st.session_state['input_flag']= False
+            st.session_state['topic']= user_input
+            initial_state= {'topic':st.session_state['topic'], 'messages':[], 'story':[]}
+            response= st.session_state['agent'].invoke(initial_state, config=CONFIG)
+            st.session_state['story'].append(response['story'][0])
+            st.session_state['interrupt'].append(response['__interrupt__'][0].value['options'])
+        st.rerun()
+
+if st.session_state['topic']!= None:
+            
+            
+    with st.chat_message('assistant', avatar="📖"):
+        for i in st.session_state['story']:
+            st.write(i)
+            
+    if st.session_state['end_story']:
+        st.success("🎬 **The End** - Thank you for experiencing this story!")
+                
+        if st.button("Start a New Story 🔄"):
+            st.session_state['interrupt'] = []
+            st.session_state['story'] = []
+            st.session_state['input_flag'] = True
+            st.session_state['topic'] = None
+            st.session_state['story_ended'] = False
             st.rerun()
 
-    if st.session_state['topic']!= None:
+    if st.session_state['interrupt'] and not st.session_state['end_story']:
+        st.markdown("### 🎯 What happens next?")
+        option1 = st.checkbox(st.session_state['interrupt'][-1][0])
+        option2 = st.checkbox(st.session_state['interrupt'][-1][1])
+        option3 = st.checkbox(st.session_state['interrupt'][-1][2])
+        option4 = st.checkbox("END STORY")
             
-            
-        with st.chat_message('assistant', avatar="📖"):
-            for i in st.session_state['story']:
-                st.write(i)
-            
-        if st.session_state['end_story']:
-            st.success("🎬 **The End** - Thank you for experiencing this story!")
-                
-            if st.button("Start a New Story 🔄"):
-                st.session_state['interrupt'] = []
-                st.session_state['story'] = []
-                st.session_state['input_flag'] = True
-                st.session_state['topic'] = None
-                st.session_state['story_ended'] = False
-                st.rerun()
-
-        if st.session_state['interrupt'] and not st.session_state['end_story']:
-            st.markdown("### 🎯 What happens next?")
-            option1 = st.checkbox(st.session_state['interrupt'][-1][0])
-            option2 = st.checkbox(st.session_state['interrupt'][-1][1])
-            option3 = st.checkbox(st.session_state['interrupt'][-1][2])
-            option4 = st.checkbox("END STORY")
-            
-        if not st.session_state['end_story']:
-            if option1 or option2 or option3 or option4 :
-                with st.spinner("✨ Generating your story..."):
-                    if option1:
-                        response2= st.session_state['agent'].invoke(
-                            Command(resume=st.session_state['interrupt'][-1][0]),
-                            config=CONFIG
-                        )
-                    elif option2:
-                        response2= st.session_state['agent'].invoke(
-                            Command(resume=st.session_state['interrupt'][-1][1]),
-                            config=CONFIG
-                        )
-                    elif option3:
-                        response2= st.session_state['agent'].invoke(
-                            Command(resume=st.session_state['interrupt'][-1][2]),
-                            config=CONFIG
-                        )
-                    elif option4:
-                        response2= st.session_state['agent'].invoke(
-                            Command(resume="end"),
-                            config=CONFIG
-                        )
-                        st.session_state['end_story']=True
-                        st.session_state['story']= response2['story']
-                        st.rerun()
+    if not st.session_state['end_story']:
+        if option1 or option2 or option3 or option4 :
+            with st.spinner("✨ Generating your story..."):
+                if option1:
+                    response2= st.session_state['agent'].invoke(
+                        Command(resume=st.session_state['interrupt'][-1][0]),
+                        config=CONFIG
+                    )
+                elif option2:
+                    response2= st.session_state['agent'].invoke(
+                        Command(resume=st.session_state['interrupt'][-1][1]),
+                        config=CONFIG
+                    )
+                elif option3:
+                    response2= st.session_state['agent'].invoke(
+                        Command(resume=st.session_state['interrupt'][-1][2]),
+                        config=CONFIG
+                    )
+                elif option4:
+                    response2= st.session_state['agent'].invoke(
+                        Command(resume="end"),
+                        config=CONFIG
+                    )
+                    st.session_state['end_story']=True
+                    st.session_state['story']= response2['story']
+                    st.rerun()
                     
-                    if not st.session_state['end_story']:
-                        st.session_state['story']= response2['story']
-                        st.session_state['interrupt'].append(response2['__interrupt__'][0].value['options'])
-                        st.rerun()
-except Exception as e:
-    st.error(f"❌ Error: {e}")
-    st.stop()
+                if not st.session_state['end_story']:
+                    st.session_state['story']= response2['story']
+                    st.session_state['interrupt'].append(response2['__interrupt__'][0].value['options'])
+                    st.rerun()
+
