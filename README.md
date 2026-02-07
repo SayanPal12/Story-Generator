@@ -114,16 +114,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [LangChain](https://langchain.com/) for the agent framework
 - [Streamlit](https://streamlit.io/) for the intuitive UI framework
 
-## 📧 Contact
-
-Your Name - [@yourtwitter](https://twitter.com/yourtwitter) - your.email@example.com
-
-Project Link: [https://github.com/yourusername/story-generator](https://github.com/yourusername/story-generator)
-
-## 🐛 Known Issues
-
-- None at the moment
-
 ## 🗺️ Roadmap
 
 - [ ] Add story export functionality (PDF/TXT)
